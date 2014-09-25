@@ -13,6 +13,7 @@
 
         @if($articles)
             @foreach($articles as $article)
+
                 <!-- First Blog Post -->
                 <h2>
                     <a href="#">{{{ $article['title'] }}}</a>
@@ -20,7 +21,7 @@
                 <p class="lead">
                     by <a href="index.php">
 
-                            {{{ $article['userId'] }}}
+                            {{{ $article['name'] }}}
 
 
                     </a>
@@ -31,10 +32,11 @@
                 <a class="btn btn-primary" href="/blog/public/article/{{{ $article['id'] }}}">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
                 <hr>
-            @endforeach
+
+        @endforeach
         @endif
 
-        {{ $articles->links() }}
+        {{ $articles->links(); }}
 
     </div>
 

@@ -18,7 +18,10 @@ class HomeController extends BaseController {
 
     public function home()
     {
-        $articles = Article::paginate(2);
+
+        $articles = Article::leftJoin('users', 'article.userId', '=', 'users.id')
+                            ->paginate(2);
+
         return View::make('article.articlelist',array('articles'=>$articles));
     }
 
