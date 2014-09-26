@@ -1,7 +1,14 @@
 <?php
 
-class ArticleController extends BaseController {
+use Blog\Articles;
 
+class ArticleController extends BaseController {
+    private $articles;
+
+    function __construct(Articles $articles){
+        $this->articles = $articles;
+    }
+    
     public function addArticle()
     {
         return View::make('article.addarticle');
@@ -11,11 +18,10 @@ class ArticleController extends BaseController {
     {
         if(Input::get('title') AND Input::get('text')){
             try{
-                $article = new Article;
-                $article->title= Input::get('title');
-                $article->text= Input::get('text');
-                $article->userId= Auth::id();
-                $inserted = $article->save();
+                $values["title"] = Input::get("title");
+                $values["text"]  = Input::get("text");
+
+                $inserted = $this->articles->addArticle($values);
             }
             catch(Exception $e){
                 Log::error($e->getMessage());
@@ -37,19 +43,12 @@ class ArticleController extends BaseController {
     public function article($id)
     {
         try{
-            $article = Article::with('user')
-                                ->with('comment.user')
-                                ->with(
-                                    ['comment' => function($query){
-                                            $query->orderBy('comment.iDate','desc');
-                                        }
-                                    ]
-                                )
-                                ->where('id','=', $id)->first();
+            $article = $this->articles->getArticle($id);
         }
         catch(Exception $e){
             Log::error($e->getMessage());
         }
+
         return View::make('article.articlepost',compact('article'));
     }
 

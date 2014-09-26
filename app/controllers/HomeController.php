@@ -1,6 +1,14 @@
 <?php
 
+use Blog\Articles;
+
 class HomeController extends BaseController {
+    private $articles;
+
+    function __construct(Articles $articles)
+    {
+        $this->articles = $articles;
+    }
 
 	public function home()
     {
@@ -18,8 +26,7 @@ class HomeController extends BaseController {
             }
 
             if(!Cache::has('article_'.$page)){
-                $articles = Article::with('user')->orderBy('iDate','desc')->skip($page*$page_limit)->take($page_limit)->get()->toArray();
-
+                $articles = $this->articles->articleList($page, $page_limit);
                 Cache::put('article_'.$page, $articles, 1);
             }
             else{

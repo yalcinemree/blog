@@ -1,6 +1,14 @@
 <?php
 
+use Blog\Users;
+
 class UserController extends BaseController {
+    private $users;
+
+    function __construct(Users $users)
+    {
+        $this->users = $users;
+    }
 
     public function signup()
     {
@@ -11,12 +19,11 @@ class UserController extends BaseController {
     {
         if(Input::get('name') AND Input::get('surname') AND Input::get('email') AND Input::get('password')){
             try{
-                $user = new User;
-                $user->name= Input::get('name');
-                $user->surname= Input::get('surname');
-                $user->email= Input::get('email');
-                $user->password= Hash::make(Input::get('password'));
-                $inserted = $user->save();
+                $values["name"] = Input::get('name');
+                $values["surname"] = Input::get('surname');
+                $values["email"] = Input::get('email');
+                $values["password"] = Input::get('password');
+                $inserted = $this->users->addUser($values);
             }
             catch(Exception $e){
                 Log::error($e->getMessage());
@@ -24,6 +31,7 @@ class UserController extends BaseController {
             }
 
             if($inserted){
+                Auth::loginUsingId($inserted->id);
                 return Redirect::route('home')->with(['message'=>'Başarıyla kaydedildi.']);
             }
             else{

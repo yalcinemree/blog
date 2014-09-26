@@ -1,18 +1,25 @@
 <?php
 
+use Blog\Comments;
 
 class CommentController extends BaseController {
+    private $comments;
+
+    function __construct(Comments $comments)
+    {
+        $this->comments = $comments;
+    }
 
     public function comment()
     {
         if(Input::get('articleId') AND Input::get('userId') AND Input::get('comment')){
             if(Auth::check()){
                 try{
-                    $comment = new Comment;
-                    $comment->articleId= Input::get('articleId');
-                    $comment->userId= Input::get('userId');
-                    $comment->comment= Input::get('comment');
-                    $comment->save();
+                    $values["articleId"] = Input::get('articleId');
+                    $values["userId"] = Input::get('userId');
+                    $values["comment"] = Input::get('comment');
+
+                    $this->comments->addComment($values);
                 }
                 catch(Exception $e){
                     Log::error($e->getMessage());
@@ -20,10 +27,13 @@ class CommentController extends BaseController {
             }
         }
 
-        $comments = Comment::with('user')
-                            ->where('articleId',Input::get('articleId'))
-                            ->orderBy('iDate','desc')
-                            ->get();
+        try{
+            $comments = $this->comments->getComment(Input::get('articleId'));
+        }
+        catch(Exception $e){
+            Log::error($e->getMessage());
+        }
+
         return View::make('comment.comment',compact('comments'));
 
     }
