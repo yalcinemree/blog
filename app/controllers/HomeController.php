@@ -1,11 +1,11 @@
 <?php
 
-use Blog\Articles;
+use Blog\Articles\ArticlesInterface;
 
 class HomeController extends BaseController {
     private $articles;
 
-    function __construct(Articles $articles)
+    function __construct(ArticlesInterface $articles)
     {
         $this->articles = $articles;
     }

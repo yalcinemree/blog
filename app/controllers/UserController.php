@@ -1,11 +1,11 @@
 <?php
 
-use Blog\Users;
+use Blog\Users\UsersInterface;
 
 class UserController extends BaseController {
     private $users;
 
-    function __construct(Users $users)
+    function __construct(UsersInterface $users)
     {
         $this->users = $users;
     }

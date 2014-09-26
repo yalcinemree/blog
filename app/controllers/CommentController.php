@@ -1,11 +1,11 @@
 <?php
 
-use Blog\Comments;
+use Blog\Comments\CommentsInterface;
 
 class CommentController extends BaseController {
     private $comments;
 
-    function __construct(Comments $comments)
+    function __construct(CommentsInterface $comments)
     {
         $this->comments = $comments;
     }
