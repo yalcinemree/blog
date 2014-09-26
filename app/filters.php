@@ -48,6 +48,13 @@ Route::filter('auth', function()
 	}
 });
 
+Route::filter('isLoggedIn', function(){
+    if(!Auth::guest())
+    {
+        return Redirect::route('home');
+    }
+});
+
 
 Route::filter('auth.basic', function()
 {

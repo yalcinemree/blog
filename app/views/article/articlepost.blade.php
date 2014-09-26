@@ -8,25 +8,19 @@
     <div class="col-lg-8">
 
         <!-- Blog Post -->
-
         <!-- Title -->
         <h1>{{{ $article['title'] }}}</h1>
-
         <!-- Author -->
         <p class="lead">
-            by <a href="#">{{{ $article['userId'] }}}</a>
+            by {{{ $article['user']['name'] }}}
         </p>
-
         <hr>
-
         <!-- Date/Time -->
         <p><span class="glyphicon glyphicon-time"></span> Posted on {{{ $article['iDate'] }}}</p>
-
         <hr>
 
         <!-- Post Content -->
         <p>{{{ $article['text'] }}}</p>
-
         <hr>
 
         <!-- Blog Comments -->
@@ -43,38 +37,30 @@
                 <button id="formOneBtn" type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
-
         <hr>
         @endif
+
         <!-- Posted Comments -->
-
-
         <div id="post-comment">
-
-            @if($c['comment'])
-            @foreach($c['comment'] as $comment)
-
-            <!-- Comment -->
-            <div class="media" >
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="http://placehold.it/64x64" alt="">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading">
-                        @foreach($c['users'] as $user)
-                            @if($user['id'] === $comment['userId'])
-                            {{{ $user['name'] }}}
-                            @endif
-                        @endforeach
-                        <small>{{{ $comment['iDate'] }}}</small>
-                    </h4>
-                    {{{ $comment['comment'] }}}
-                </div>
-            </div>
-
-            @endforeach
+            @if(count($article['comment']) > 0)
+                @foreach($article['comment'] as $comment)
+                    <!-- Comment -->
+                    <div class="media" >
+                        <a class="pull-left" href="#">
+                            <img class="media-object" src="http://placehold.it/64x64" alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                {{{ $comment['user']['name'] }}}
+                                <small>{{{ $comment['iDate'] }}}</small>
+                            </h4>
+                            {{{ $comment['comment'] }}}
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <h4>Yazılmiş yorum yoktur.</h4>
             @endif
-
         </div>
 
     </div>

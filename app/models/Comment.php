@@ -11,4 +11,9 @@ class Comment extends Eloquent{
 
     const CREATED_AT = 'iDate';
     const UPDATED_AT = 'uDate';
+
+    public function user()
+    {
+        return $this->belongsTo('User', 'userId');
+    }
 } 
